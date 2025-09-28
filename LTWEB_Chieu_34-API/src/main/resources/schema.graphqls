@@ -1,0 +1,72 @@
+scalar BigDecimal
+
+
+enum SortDirection { ASC DESC }
+
+
+type User {
+id: ID!
+fullname: String!
+email: String!
+phone: String
+categories: [Category!]!
+products: [Product!]!
+}
+
+
+type Category {
+id: ID!
+name: String!
+images: String
+users: [User!]!
+products: [Product!]!
+}
+
+
+type Product {
+id: ID!
+title: String!
+quantity: Int
+desc: String
+price: BigDecimal!
+owner: User
+categories: [Category!]!
+}
+
+
+type Query {
+# 1) Hiển thị tất cả product theo giá tăng dần
+products(orderByPrice: SortDirection = ASC): [Product!]!
+
+
+# 2) Lấy tất cả product của 01 category
+productsByCategory(categoryId: ID!): [Product!]!
+
+
+# tiện ích
+users: [User!]!
+categories: [Category!]!
+}
+
+
+input UserInput { fullname: String!, email: String!, password: String!, phone: String }
+input CategoryInput { name: String!, images: String }
+input ProductInput { title: String!, quantity: Int, desc: String, price: BigDecimal!, userId: ID, categoryIds: [ID!] }
+
+
+
+
+type Mutation {
+# CRUD User
+createUser(input: UserInput!): User!
+updateUser(id: ID!, input: UserInput!): User!
+deleteUser(id: ID!): Boolean!
+
+
+# CRUD Category
+createCategory(input: CategoryInput!): Category!
+updateCategory(id: ID!, input: CategoryInput!): Category!
+deleteCategory(id: ID!): Boolean!
+
+
+}
